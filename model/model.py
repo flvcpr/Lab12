@@ -29,31 +29,40 @@ class Model:
         self.ottimo = []
         self.pesoMax = 0
         for nodo in self.nodi:
-            print(f"controllo nodo {nodo}")
             parziale = [nodo]
-            self._ricorsione(parziale, N)
+            self._ricorsione2(parziale, N)
         return self.ottimo, self.pesoMax
 
-    def _ricorsione(self, parziale, N):  # N è il numero di archi inseriti dall'utente
+    def _ricorsione(self, parziale, N):
         if len(parziale) > N:
             return
-
         if parziale[0] == parziale[-1]:
             if len(parziale[1:-1]) == len(set(parziale[1:-1])):
                 if self.calcolaPeso(parziale) > self.pesoMax:
-                    print("salvo una")
                     self.ottimo = copy.deepcopy(parziale)
                     self.pesoMax = self.calcolaPeso(parziale)
                     return
-
         for v in self.grafo.neighbors(parziale[-1]):
             parziale.append(v)
             self._ricorsione(parziale, N)
             parziale.pop()
 
+    def _ricorsione2(self, parziale, N):
+        if len(parziale) > N+1:
+            return
+        if len(parziale) == N+1 and parziale[0] == parziale[-1]:
+            if (len(parziale) - 1) == len(set(parziale)):
+                if self.calcolaPeso(parziale) > self.pesoMax:
+                    self.ottimo = copy.deepcopy(parziale)
+                    self.pesoMax = self.calcolaPeso(parziale)
+                    return
+        for v in self.grafo.neighbors(parziale[-1]):
+            parziale.append(v)
+            self._ricorsione2(parziale, N)
+            parziale.pop()
 
     def calcolaPeso(self, lista):
         peso = 0
-        for i in range(len(lista)-1):
-            peso += self.grafo[lista[i]][lista[i+1]]["weight"]
+        for i in range(len(lista) - 1):
+            peso += self.grafo[lista[i]][lista[i + 1]]["weight"]
         return peso

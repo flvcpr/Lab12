@@ -57,7 +57,10 @@ class Controller:
             return
         print("premuto")
         ottimo, peso = self._model.getPercorsoPesoMax(n)
-        self._view.txtOut3.controls.append(ft.Text(f"peso: {peso}, \n {ottimo}"))
+        #Nome_Retailer_1 — > Nome_Retailer_2: peso_arco
+        self._view.txtOut3.controls.append(ft.Text(f"Peso cammino massimo: {peso}"))
+        for i in range(len(ottimo)-1):
+            self._view.txtOut3.controls.append(ft.Text(f"{ottimo[i]} --> {ottimo[i+1]}: {self._model.grafo[ottimo[i]][ottimo[i+1]]["weight"]}"))
         self._view.update_page()
 
     # da view il numero massimo valido di numero di archi: terminale per il parziale
